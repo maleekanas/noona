@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+/*
+  AgentPost design tokens — "Interface-as-Evidence" / Modern Corporate &
+  Brutalist-Lite. Validated design system: deep charcoal/slate base, Electric
+  Indigo primary, Terra Cotta secondary, Source Serif 4 headlines, Geist body,
+  JetBrains Mono for data/metadata labels. Dark-first, professional, no
+  gradients / glow / sparkle AI-slop visuals. Elevation via 1px borders and
+  tonal layering, not shadows (shadows reserved for modals/overlays only).
+*/
+
+:root {
+  --background: #0b1326;
+  --background-deep: #020617;
+  --surface: #171f33;
+  --surface-low: #131b2e;
+  --surface-lowest: #060e20;
+  --surface-high: #222a3d;
+  --surface-highest: #2d3449;
+  --surface-bright: #31394d;
+  --border: #1e293b;
+  --outline: #464554;
+
+  --foreground: #dae2fd;
+  --foreground-muted: #c7c4d7;
+
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+  --secondary: #f45d48;
+  --secondary-foreground: #ffffff;
+
+  --sentiment-positive: #10b981;
+  --sentiment-negative: #ef4444;
+  --sentiment-neutral: #64748b;
+
+  --radius: 0.25rem;
+  --sidebar-width: 280px;
+  --agent-panel-width: 360px;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-deep: var(--background-deep);
+  --color-surface: var(--surface);
+  --color-surface-low: var(--surface-low);
+  --color-surface-lowest: var(--surface-lowest);
+  --color-surface-high: var(--surface-high);
+  --color-surface-highest: var(--surface-highest);
+  --color-surface-bright: var(--surface-bright);
+  --color-border: var(--border);
+  --color-outline: var(--outline);
+
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-sentiment-positive: var(--sentiment-positive);
+  --color-sentiment-negative: var(--sentiment-negative);
+  --color-sentiment-neutral: var(--sentiment-neutral);
+
+  --radius-DEFAULT: var(--radius);
+  --spacing-sidebar: var(--sidebar-width);
+  --spacing-agent-panel: var(--agent-panel-width);
+
+  --font-sans: var(--font-geist-sans);
+  --font-headline: var(--font-source-serif);
+  --font-mono: var(--font-jetbrains-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3,
+.font-headline {
+  font-family: var(--font-headline);
+}
