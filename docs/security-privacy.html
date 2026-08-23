@@ -1,0 +1,222 @@
+<!doctype html>
+<title>Security &amp; Privacy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDEBE3; --surface:#FFFFFF; --surface-2:#F6F4EE;
+    --header-bar:#14191F; --header-bar-text:#EDEBE3;
+    --text:#191F27; --text-muted:#5A6371; --border:#D9D5C8;
+    --amber:#A3660E; --amber-strong:#8A5509; --teal:#1F6459; --coral:#A93E29;
+    --dot1:#C1503A; --dot2:#C99A2E; --dot3:#3E8A6E;
+    --shadow:0 1px 0 rgba(20,25,31,0.04), 0 8px 24px -12px rgba(20,25,31,0.18);
+    --radius:10px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#14191F; --surface:#1B222B; --surface-2:#202832;
+      --header-bar:#0D1116; --header-bar-text:#EDEBE3;
+      --text:#E7E4DB; --text-muted:#96A0AC; --border:#313B47;
+      --amber:#E9A23B; --amber-strong:#F3B25C; --teal:#4FA593; --coral:#E06A50;
+      --dot1:#E06A50; --dot2:#E9C468; --dot3:#4FA593;
+      --shadow:0 1px 0 rgba(0,0,0,0.3), 0 12px 32px -14px rgba(0,0,0,0.55);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#14191F; --surface:#1B222B; --surface-2:#202832;
+    --header-bar:#0D1116; --header-bar-text:#EDEBE3;
+    --text:#E7E4DB; --text-muted:#96A0AC; --border:#313B47;
+    --amber:#E9A23B; --amber-strong:#F3B25C; --teal:#4FA593; --coral:#E06A50;
+    --dot1:#E06A50; --dot2:#E9C468; --dot3:#4FA593;
+    --shadow:0 1px 0 rgba(0,0,0,0.3), 0 12px 32px -14px rgba(0,0,0,0.55);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:"Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  a{color:inherit}
+  ::selection{background:var(--amber);color:var(--header-bar-text)}
+  .display{font-family:"Big Shoulders Display","Arial Narrow",sans-serif;font-weight:800;letter-spacing:0.005em;text-transform:uppercase;text-wrap:balance;}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,monospace;font-variant-numeric:tabular-nums;}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+  .doc{max-width:900px;}
+  @media (max-width:640px){.wrap{padding:0 18px}}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:4px;}
+  header.site{position:sticky;top:0;z-index:40;background:var(--bg);border-bottom:1px solid var(--border);}
+  .navrow{display:flex;align-items:center;justify-content:space-between;padding:16px 0;gap:20px;}
+  .wordmark{display:flex;align-items:baseline;gap:2px;font-family:"Big Shoulders Display",sans-serif;font-weight:800;font-size:1.5rem;text-transform:uppercase;letter-spacing:0.01em;text-decoration:none;}
+  .wordmark .dot{color:var(--amber);font-size:1.6rem;line-height:0}
+  nav.primary{display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
+  nav.primary a{text-decoration:none;font-size:0.9rem;color:var(--text-muted);white-space:nowrap;}
+  nav.primary a:hover{color:var(--text)}
+  .navlinks{display:flex;gap:22px;}
+  @media (max-width:860px){.navlinks{display:none}}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border-radius:6px;font-size:0.92rem;font-weight:600;text-decoration:none;border:1px solid transparent;cursor:pointer;font-family:inherit;}
+  .btn-primary{background:var(--amber);color:#191008;}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn-primary{color:#1A1204}}
+  :root[data-theme="dark"] .btn-primary{color:#1A1204}
+  .btn-primary:hover{background:var(--amber-strong)}
+  .btn-ghost{background:transparent;border-color:var(--border);color:var(--text);}
+  .btn-ghost:hover{border-color:var(--text-muted)}
+  .btn-sm{padding:8px 14px;font-size:0.82rem;}
+
+  .hero-sec{border-top:none;padding:60px 0 36px;}
+  .hero-sec h1{font-size:clamp(2rem,4.6vw,3rem);line-height:1.03;margin:14px 0 16px;max-width:20ch;}
+  .hero-sec p.sub{font-size:1.05rem;color:var(--text-muted);max-width:64ch;margin:0;}
+
+  .layout{display:grid;grid-template-columns:220px 1fr;gap:44px;padding:0 0 70px;}
+  @media (max-width:860px){.layout{grid-template-columns:1fr;gap:24px;}}
+  .toc{position:sticky;top:76px;align-self:start;display:flex;flex-direction:column;gap:10px;}
+  @media (max-width:860px){.toc{position:static;flex-direction:row;flex-wrap:wrap;gap:14px;}}
+  .toc a{font-family:"IBM Plex Mono",monospace;font-size:0.78rem;color:var(--text-muted);text-decoration:none;}
+  .toc a:hover{color:var(--amber);}
+
+  .doc-sec{border-top:1px solid var(--border);padding:34px 0;}
+  .doc-sec:first-child{border-top:none;padding-top:0;}
+  .doc-sec h2{font-size:1.4rem;margin:0 0 12px;text-transform:none;letter-spacing:0;}
+  .doc-sec p{color:var(--text-muted);margin:0 0 12px;font-size:0.96rem;max-width:66ch;}
+  .doc-sec ul{margin:0 0 12px;padding-left:20px;color:var(--text-muted);font-size:0.94rem;}
+  .doc-sec li{margin-bottom:6px;}
+  .doc-sec li b{color:var(--text);}
+
+  .role-table{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);margin-top:14px;}
+  table{border-collapse:collapse;width:100%;min-width:600px;background:var(--surface);}
+  th,td{text-align:left;padding:12px 15px;font-size:0.88rem;border-bottom:1px solid var(--border);vertical-align:top;}
+  thead th{font-family:"IBM Plex Mono",monospace;font-size:0.7rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);background:var(--surface-2);}
+  tbody tr:last-child td{border-bottom:none;}
+  td.role{font-weight:600;color:var(--text);width:16%;}
+  td.desc{color:var(--text-muted);}
+
+  .status-row{display:flex;align-items:center;gap:10px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-top:10px;}
+  .status-dot{width:9px;height:9px;border-radius:50%;background:var(--amber);flex-shrink:0;}
+  .status-row p{margin:0;font-size:0.9rem;color:var(--text-muted);}
+  .status-row b{color:var(--text);}
+
+  footer{border-top:1px solid var(--border);padding:40px 0 30px;font-size:0.82rem;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  footer a{text-decoration:none;color:var(--text-muted);margin-right:16px;}
+  footer a:hover{color:var(--amber);}
+</style>
+
+<header class="site">
+  <div class="wrap navrow">
+    <a class="wordmark" href="agentpost-landing.html">Agent<span class="dot">•</span>Post</a>
+    <nav class="primary">
+      <div class="navlinks">
+        <a href="agentpost-landing.html#features">Features</a>
+        <a href="agentpost-landing.html#pricing">Pricing</a>
+        <a href="vs-hootsuite.html">vs. Hootsuite</a>
+        <a href="vs-buffer.html">vs. Buffer</a>
+        <a href="vs-metricool.html">vs. Metricool</a>
+      </div>
+      <a class="btn btn-ghost btn-sm" href="agentpost-landing.html#login">Log in</a>
+      <a class="btn btn-primary btn-sm" href="agentpost-landing.html#signup">Start free</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero-sec">
+    <span class="eyebrow">Security &amp; Privacy</span>
+    <h1 class="display">What we collect, why, and who can see it.</h1>
+    <p class="sub">This page describes AgentPost's actual data-handling practices in plain language, written for the people using the product — not a legal team. We'll update it as the product and our certifications change; nothing here is boilerplate we don't mean.</p>
+  </section>
+
+  <div class="layout">
+    <nav class="toc" aria-label="Section navigation">
+      <a href="#collect">What we collect</a>
+      <a href="#use">How we use it</a>
+      <a href="#storage">Where it lives</a>
+      <a href="#rights">Your rights (GDPR)</a>
+      <a href="#roles">Team permissions</a>
+      <a href="#platforms">Platform connections</a>
+      <a href="#certs">Certifications</a>
+      <a href="#incident">If something goes wrong</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="doc">
+      <section class="doc-sec" id="collect">
+        <h2>What we collect</h2>
+        <p>Only what's needed to run the product you're using:</p>
+        <ul>
+          <li><b>Account details</b> — name, email, and the Brands you set up.</li>
+          <li><b>Platform access tokens</b> — issued when you connect Facebook, Instagram, TikTok, and the rest, scoped to exactly the permissions you approved in that platform's connection wizard.</li>
+          <li><b>Content you create or upload</b> — drafts, images, captions, and the posting history the agent studies to draft new ones.</li>
+          <li><b>Performance data</b> — the metrics each connected platform returns to us (reach, engagement, clicks) and website analytics from your tracking tag.</li>
+          <li><b>Billing details</b> — handled entirely by our payment processor. AgentPost never stores full card numbers.</li>
+        </ul>
+      </section>
+
+      <section class="doc-sec" id="use">
+        <h2>How we use it</h2>
+        <p>Your posting history trains the agent's drafts for your Brands only — it's never used to draft posts for anyone else's account, and it's never sold to advertisers or data brokers. Nothing publishes to a connected platform without a person approving it, either you or a teammate with permission.</p>
+      </section>
+
+      <section class="doc-sec" id="storage">
+        <h2>Where it lives</h2>
+        <p>Data is encrypted in transit (TLS) between your browser, AgentPost, and the platforms you connect, and encrypted at rest in our database. Regional data residency for EU customers — keeping that data on EU infrastructure — is on our near-term roadmap; it isn't live yet, and this page will say so plainly the day it changes.</p>
+      </section>
+
+      <section class="doc-sec" id="rights">
+        <h2>Your rights, GDPR and beyond</h2>
+        <p>If you're in the EU/EEA, UK, or a region with similar protections, you can ask us to:</p>
+        <ul>
+          <li>Send a copy of the personal data we hold about you</li>
+          <li>Correct anything that's wrong</li>
+          <li>Delete your account and associated data</li>
+          <li>Export your data in a portable format</li>
+        </ul>
+        <p>Email <a href="mailto:privacy@agentpost.com" style="color:var(--teal);text-decoration:none;">privacy@agentpost.com</a> — we respond within 30 days, and usually much sooner. A Data Processing Agreement is available on request for business and agency customers.</p>
+      </section>
+
+      <section class="doc-sec" id="roles">
+        <h2>Team permissions, per Brand</h2>
+        <p>Every teammate you add gets a role scoped to a specific Brand, not blanket account access:</p>
+        <div class="role-table">
+          <table>
+            <thead><tr><th>Role</th><th>What they can do</th></tr></thead>
+            <tbody>
+              <tr><td class="role">Owner</td><td class="desc">Full control of the Brand, including billing and removing other members.</td></tr>
+              <tr><td class="role">Admin</td><td class="desc">Manage platform connections, team members, and settings — no access to billing.</td></tr>
+              <tr><td class="role">Editor</td><td class="desc">Create, schedule, and approve content; reply in the inbox; can't change connections or team.</td></tr>
+              <tr><td class="role">Client-viewer</td><td class="desc">Read-only access to reports and dashboards — no posting, no raw account data.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="doc-sec" id="platforms">
+        <h2>How we connect to platforms</h2>
+        <p>AgentPost connects to Facebook, Instagram, TikTok, LinkedIn, X, Pinterest, YouTube, Twitch, Google Business Profile, Threads, Bluesky, WhatsApp Business, Telegram, and Discord only through each platform's official, documented API. We don't scrape pages or rely on undocumented endpoints, and we monitor token health so a connection doesn't silently expire and break your posting schedule.</p>
+      </section>
+
+      <section class="doc-sec" id="certs">
+        <h2>Certifications</h2>
+        <div class="status-row">
+          <span class="status-dot" aria-hidden="true"></span>
+          <p><b>SOC 2 Type II:</b> in progress, not yet certified. We're publishing this page before certification on purpose — we'd rather be accurate now than quiet until there's a badge to show.</p>
+        </div>
+      </section>
+
+      <section class="doc-sec" id="incident">
+        <h2>If something goes wrong</h2>
+        <p>If we discover a security incident that affects your data, we'll notify affected customers without undue delay — in line with GDPR's 72-hour expectation for personal data breaches — and tell you plainly what happened, what data was involved, and what we're doing about it.</p>
+      </section>
+
+      <section class="doc-sec" id="contact">
+        <h2>Contact</h2>
+        <p>Questions about this page, a Data Processing Agreement, or anything else data-related: <a href="mailto:privacy@agentpost.com" style="color:var(--teal);text-decoration:none;">privacy@agentpost.com</a>.</p>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="wrap">
+  <div>
+    <a href="agentpost-landing.html">Home</a>
+    <a href="vs-hootsuite.html">vs. Hootsuite</a>
+    <a href="vs-buffer.html">vs. Buffer</a>
+    <a href="vs-metricool.html">vs. Metricool</a>
+  </div>
+  <div>© 2026 AgentPost</div>
+</footer>

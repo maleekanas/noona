@@ -1,0 +1,178 @@
+<!doctype html>
+<title>AgentPost vs. Hootsuite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDEBE3; --surface:#FFFFFF; --surface-2:#F6F4EE;
+    --header-bar:#14191F; --header-bar-text:#EDEBE3;
+    --text:#191F27; --text-muted:#5A6371; --border:#D9D5C8;
+    --amber:#A3660E; --amber-strong:#8A5509; --teal:#1F6459; --coral:#A93E29;
+    --dot1:#C1503A; --dot2:#C99A2E; --dot3:#3E8A6E;
+    --shadow:0 1px 0 rgba(20,25,31,0.04), 0 8px 24px -12px rgba(20,25,31,0.18);
+    --radius:10px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#14191F; --surface:#1B222B; --surface-2:#202832;
+      --header-bar:#0D1116; --header-bar-text:#EDEBE3;
+      --text:#E7E4DB; --text-muted:#96A0AC; --border:#313B47;
+      --amber:#E9A23B; --amber-strong:#F3B25C; --teal:#4FA593; --coral:#E06A50;
+      --dot1:#E06A50; --dot2:#E9C468; --dot3:#4FA593;
+      --shadow:0 1px 0 rgba(0,0,0,0.3), 0 12px 32px -14px rgba(0,0,0,0.55);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#14191F; --surface:#1B222B; --surface-2:#202832;
+    --header-bar:#0D1116; --header-bar-text:#EDEBE3;
+    --text:#E7E4DB; --text-muted:#96A0AC; --border:#313B47;
+    --amber:#E9A23B; --amber-strong:#F3B25C; --teal:#4FA593; --coral:#E06A50;
+    --dot1:#E06A50; --dot2:#E9C468; --dot3:#4FA593;
+    --shadow:0 1px 0 rgba(0,0,0,0.3), 0 12px 32px -14px rgba(0,0,0,0.55);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:"Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  a{color:inherit}
+  ::selection{background:var(--amber);color:var(--header-bar-text)}
+  .display{font-family:"Big Shoulders Display","Arial Narrow",sans-serif;font-weight:800;letter-spacing:0.005em;text-transform:uppercase;text-wrap:balance;}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,monospace;font-variant-numeric:tabular-nums;}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+  @media (max-width:640px){.wrap{padding:0 18px}}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:4px;}
+  header.site{position:sticky;top:0;z-index:40;background:var(--bg);border-bottom:1px solid var(--border);}
+  .navrow{display:flex;align-items:center;justify-content:space-between;padding:16px 0;gap:20px;}
+  .wordmark{display:flex;align-items:baseline;gap:2px;font-family:"Big Shoulders Display",sans-serif;font-weight:800;font-size:1.5rem;text-transform:uppercase;letter-spacing:0.01em;text-decoration:none;}
+  .wordmark .dot{color:var(--amber);font-size:1.6rem;line-height:0}
+  nav.primary{display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
+  nav.primary a{text-decoration:none;font-size:0.9rem;color:var(--text-muted);white-space:nowrap;}
+  nav.primary a:hover{color:var(--text)}
+  .navlinks{display:flex;gap:22px;}
+  @media (max-width:860px){.navlinks{display:none}}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border-radius:6px;font-size:0.92rem;font-weight:600;text-decoration:none;border:1px solid transparent;cursor:pointer;font-family:inherit;}
+  .btn-primary{background:var(--amber);color:#191008;}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn-primary{color:#1A1204}}
+  :root[data-theme="dark"] .btn-primary{color:#1A1204}
+  .btn-primary:hover{background:var(--amber-strong)}
+  .btn-ghost{background:transparent;border-color:var(--border);color:var(--text);}
+  .btn-ghost:hover{border-color:var(--text-muted)}
+  .btn-sm{padding:8px 14px;font-size:0.82rem;}
+  section{padding:56px 0;border-top:1px solid var(--border);}
+  .hero-sec{border-top:none;padding:64px 0 40px;}
+  .hero-sec h1{font-size:clamp(2.1rem,5vw,3.4rem);line-height:1.02;margin:14px 0 18px;max-width:20ch;}
+  .hero-sec p.sub{font-size:1.08rem;color:var(--text-muted);max-width:60ch;margin:0 0 26px;}
+  .cta-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+  .verdicts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-top:36px;}
+  @media (max-width:760px){.verdicts{grid-template-columns:1fr}}
+  .verdict{background:var(--surface);padding:24px;}
+  .verdict .who{font-family:"IBM Plex Mono",monospace;font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--teal);margin-bottom:8px;}
+  .verdict p{margin:0;font-size:0.94rem;color:var(--text-muted);}
+  .verdict.agentpost .who{color:var(--amber);}
+  .sec-head{margin-bottom:30px;}
+  .sec-head h2{font-size:clamp(1.5rem,3vw,2.1rem);margin:8px 0 0;}
+  .table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);}
+  table{border-collapse:collapse;width:100%;min-width:640px;background:var(--surface);}
+  th,td{text-align:left;padding:13px 16px;font-size:0.9rem;border-bottom:1px solid var(--border);vertical-align:top;}
+  thead th{font-family:"IBM Plex Mono",monospace;font-size:0.72rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);background:var(--surface-2);}
+  tbody tr:last-child td{border-bottom:none;}
+  td.row-label{font-weight:600;color:var(--text);width:22%;}
+  td.hs{color:var(--text-muted);}
+  td.ap{color:var(--text);}
+  td.ap b{color:var(--teal);font-weight:600;}
+  .footnote{font-size:0.82rem;color:var(--text-muted);margin-top:14px;font-family:"IBM Plex Mono",monospace;}
+  .final{background:var(--header-bar);color:var(--header-bar-text);border-radius:14px;padding:44px;display:grid;grid-template-columns:1.2fr auto;gap:28px;align-items:center;}
+  @media (max-width:760px){.final{grid-template-columns:1fr;padding:32px 24px;}}
+  .final h2{font-size:clamp(1.5rem,3.4vw,2.1rem);margin:8px 0 10px;line-height:1.05;}
+  .final p{color:#C9C2B6;max-width:48ch;margin:0;font-size:0.94rem;}
+  .final .eyebrow{color:#B7ADA0;}
+  footer{border-top:1px solid var(--border);padding:40px 0 30px;font-size:0.82rem;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  footer a{text-decoration:none;color:var(--text-muted);margin-right:16px;}
+  footer a:hover{color:var(--amber);}
+</style>
+
+<header class="site">
+  <div class="wrap navrow">
+    <a class="wordmark" href="agentpost-landing.html">Agent<span class="dot">•</span>Post</a>
+    <nav class="primary">
+      <div class="navlinks">
+        <a href="agentpost-landing.html#features">Features</a>
+        <a href="agentpost-landing.html#pricing">Pricing</a>
+        <a href="vs-buffer.html">vs. Buffer</a>
+        <a href="vs-metricool.html">vs. Metricool</a>
+        <a href="security-privacy.html">Security</a>
+      </div>
+      <a class="btn btn-ghost btn-sm" href="agentpost-landing.html#login">Log in</a>
+      <a class="btn btn-primary btn-sm" href="agentpost-landing.html#signup">Start free</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero-sec wrap">
+    <span class="eyebrow">Comparison — AgentPost vs. Hootsuite</span>
+    <h1 class="display">More networks at Hootsuite. More done for you at AgentPost.</h1>
+    <p class="sub">Hootsuite is built for large teams that need broad network coverage and enterprise controls. AgentPost is built for the freelancer, small business, or agency that wants an agent to actually draft the week — starting at $0.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="agentpost-landing.html#signup">Start free — no card needed</a>
+      <a class="btn btn-ghost" href="agentpost-landing.html#pricing">See AgentPost pricing</a>
+    </div>
+
+    <div class="verdicts">
+      <div class="verdict">
+        <div class="who mono">Pick Hootsuite if</div>
+        <p>You're coordinating 35+ networks and a large approval chain, and you already have budget for enterprise seats starting around $99/mo (Standard plan, published August 2026).</p>
+      </div>
+      <div class="verdict agentpost">
+        <div class="who mono">Pick AgentPost if</div>
+        <p>You want a free plan that's genuinely usable, not a crippled trial, and an agent that hands you finished drafts instead of a chat window you have to prompt yourself.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Side by side</span>
+      <h2 class="display">Where each one actually wins</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Category</th><th>Hootsuite</th><th>AgentPost</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="row-label">Starting price</td><td class="hs">~$99/mo (Standard, published Aug 2026)</td><td class="ap"><b>$0</b> to start · $15/mo per Brand on Starter</td></tr>
+          <tr><td class="row-label">Free plan</td><td class="hs">No ongoing free tier</td><td class="ap">Yes — 1 Brand, real usage, no card required</td></tr>
+          <tr><td class="row-label">AI approach</td><td class="hs">Wisdom: a chat assistant that answers questions about your data</td><td class="ap">An agent that <b>drafts full posts</b> from your Brand's own history and asks for approval</td></tr>
+          <tr><td class="row-label">Core network coverage</td><td class="hs">35+ networks — the broadest in the category</td><td class="ap">14 social &amp; messaging platforms plus website tracking at launch</td></tr>
+          <tr><td class="row-label">Employee advocacy</td><td class="hs">Yes — Parliament</td><td class="ap">Not yet — on our roadmap</td></tr>
+          <tr><td class="row-label">Local review management</td><td class="hs">Not a core focus</td><td class="ap">Yes — Google, Facebook &amp; Trustpilot monitoring with AI-assisted responses</td></tr>
+          <tr><td class="row-label">White-label reseller tier</td><td class="hs">Agency-friendly seats, not white-label reselling</td><td class="ap">Yes — custom domain and branding for agencies reselling access</td></tr>
+          <tr><td class="row-label">Global pricing</td><td class="hs">USD pricing</td><td class="ap">PPP-adjusted local currency plus regional payment rails (Pix, Mercado Pago, more)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="footnote">Hootsuite figures are drawn from publicly published pricing and G2 category data as of August 2026 — confirm current details on hootsuite.com.</p>
+  </section>
+
+  <section class="wrap" style="border-top:none;padding-top:0;">
+    <div class="final">
+      <div>
+        <span class="eyebrow">Try it before you switch anything</span>
+        <h2 class="display">Connect one platform. See what the agent drafts.</h2>
+        <p>No migration, no commitment — run AgentPost alongside whatever you use today and compare the drafts yourself.</p>
+      </div>
+      <a class="btn btn-primary" href="agentpost-landing.html#signup">Start free — no card needed</a>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div>
+    <a href="agentpost-landing.html">Home</a>
+    <a href="vs-buffer.html">vs. Buffer</a>
+    <a href="vs-metricool.html">vs. Metricool</a>
+    <a href="security-privacy.html">Security &amp; Privacy</a>
+  </div>
+  <div>© 2026 AgentPost</div>
+</footer>
