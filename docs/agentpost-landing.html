@@ -1,0 +1,908 @@
+<!doctype html>
+<title>AgentPost</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --bg: #EDEBE3;
+    --surface: #FFFFFF;
+    --surface-2: #F6F4EE;
+    --header-bar: #14191F;
+    --header-bar-text: #EDEBE3;
+    --ink: #14191F;
+    --text: #191F27;
+    --text-muted: #5A6371;
+    --border: #D9D5C8;
+    --amber: #A3660E;
+    --amber-strong: #8A5509;
+    --teal: #1F6459;
+    --coral: #A93E29;
+    --dot1: #C1503A; --dot2: #C99A2E; --dot3: #3E8A6E;
+    --shadow: 0 1px 0 rgba(20,25,31,0.04), 0 8px 24px -12px rgba(20,25,31,0.18);
+    --radius: 10px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg: #14191F;
+      --surface: #1B222B;
+      --surface-2: #202832;
+      --header-bar: #0D1116;
+      --header-bar-text: #EDEBE3;
+      --ink: #ECE9E1;
+      --text: #E7E4DB;
+      --text-muted: #96A0AC;
+      --border: #313B47;
+      --amber: #E9A23B;
+      --amber-strong: #F3B25C;
+      --teal: #4FA593;
+      --coral: #E06A50;
+      --dot1: #E06A50; --dot2: #E9C468; --dot3: #4FA593;
+      --shadow: 0 1px 0 rgba(0,0,0,0.3), 0 12px 32px -14px rgba(0,0,0,0.55);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg: #14191F;
+    --surface: #1B222B;
+    --surface-2: #202832;
+    --header-bar: #0D1116;
+    --header-bar-text: #EDEBE3;
+    --ink: #ECE9E1;
+    --text: #E7E4DB;
+    --text-muted: #96A0AC;
+    --border: #313B47;
+    --amber: #E9A23B;
+    --amber-strong: #F3B25C;
+    --teal: #4FA593;
+    --coral: #E06A50;
+    --dot1: #E06A50; --dot2: #E9C468; --dot3: #4FA593;
+    --shadow: 0 1px 0 rgba(0,0,0,0.3), 0 12px 32px -14px rgba(0,0,0,0.55);
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%}
+  a{color:inherit}
+  ::selection{background:var(--amber); color:var(--header-bar-text)}
+
+  .display{
+    font-family:"Big Shoulders Display", "Arial Narrow", sans-serif;
+    font-weight:800;
+    letter-spacing:0.005em;
+    text-transform:uppercase;
+    text-wrap:balance;
+  }
+  .mono{
+    font-family:"IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .eyebrow{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--text-muted);
+  }
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+  @media (max-width: 640px){ .wrap{padding:0 18px} }
+
+  a:focus-visible, button:focus-visible, summary:focus-visible{
+    outline:2px solid var(--amber);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  /* ============ NAV ============ */
+  header.site{
+    position:sticky; top:0; z-index:40;
+    background:var(--bg);
+    border-bottom:1px solid var(--border);
+  }
+  .navrow{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 0;
+    gap:20px;
+  }
+  .wordmark{
+    display:flex; align-items:baseline; gap:2px;
+    font-family:"Big Shoulders Display", sans-serif;
+    font-weight:800;
+    font-size:1.5rem;
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+    text-decoration:none;
+  }
+  .wordmark .dot{ color:var(--amber); font-size:1.6rem; line-height:0 }
+  nav.primary{ display:flex; align-items:center; gap:28px; }
+  nav.primary a{
+    text-decoration:none;
+    font-size:0.92rem;
+    color:var(--text-muted);
+    white-space:nowrap;
+  }
+  nav.primary a:hover{ color:var(--text) }
+  .navlinks{ display:flex; gap:26px; }
+  @media (max-width: 860px){ .navlinks{ display:none } }
+
+  .lang{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.78rem;
+    color:var(--text-muted);
+    letter-spacing:0.04em;
+  }
+  .lang b{ color:var(--text) }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    gap:8px;
+    padding:11px 20px;
+    border-radius:6px;
+    font-size:0.92rem;
+    font-weight:600;
+    text-decoration:none;
+    border:1px solid transparent;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .btn-primary{
+    background:var(--amber);
+    color:#191008;
+  }
+  :root[data-theme="dark"] .btn-primary, @media (prefers-color-scheme:dark){ .btn-primary{ color:#1A1204 } }
+  .btn-primary:hover{ background:var(--amber-strong) }
+  .btn-ghost{
+    background:transparent;
+    border-color:var(--border);
+    color:var(--text);
+  }
+  .btn-ghost:hover{ border-color:var(--text-muted) }
+  .btn-sm{ padding:8px 14px; font-size:0.82rem; }
+
+  /* ============ HERO ============ */
+  .hero{
+    padding:76px 0 60px;
+    display:grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap:56px;
+    align-items:center;
+  }
+  @media (max-width: 980px){
+    .hero{ grid-template-columns:1fr; padding:44px 0 40px; gap:36px; }
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 5.6vw, 4.1rem);
+    line-height:0.98;
+    margin:14px 0 20px;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--amber);
+  }
+  .hero p.sub{
+    font-size:1.14rem;
+    color:var(--text-muted);
+    max-width:52ch;
+    margin:0 0 30px;
+  }
+  .cta-row{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-bottom:28px; }
+  .cta-note{ font-family:"IBM Plex Mono", monospace; font-size:0.78rem; color:var(--text-muted); }
+
+  .proof-strip{
+    display:flex; gap:0;
+    border-top:1px solid var(--border);
+    margin-top:12px;
+    padding-top:18px;
+    flex-wrap:wrap;
+  }
+  .proof-item{
+    flex:1 1 160px;
+    padding-right:20px;
+  }
+  .proof-item b{
+    display:block;
+    font-family:"Big Shoulders Display", sans-serif;
+    font-size:1.9rem;
+    font-weight:800;
+    line-height:1;
+    color:var(--text);
+  }
+  .proof-item span{
+    font-size:0.82rem;
+    color:var(--text-muted);
+  }
+
+  /* ============ CONSOLE CARD (product mock chrome) ============ */
+  .console{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .console-bar{
+    background:var(--header-bar);
+    color:var(--header-bar-text);
+    display:flex; align-items:center; gap:10px;
+    padding:9px 14px;
+  }
+  .console-dots{ display:flex; gap:6px; }
+  .console-dots i{ width:8px; height:8px; border-radius:50%; display:block; }
+  .console-dots i:nth-child(1){ background:var(--dot1) }
+  .console-dots i:nth-child(2){ background:var(--dot2) }
+  .console-dots i:nth-child(3){ background:var(--dot3) }
+  .console-title{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.74rem;
+    letter-spacing:0.03em;
+    opacity:0.85;
+  }
+  .console-body{ padding:16px; }
+
+  .draft-row{
+    display:grid;
+    grid-template-columns: 76px 1fr auto;
+    gap:12px;
+    align-items:center;
+    padding:11px 8px;
+    border-radius:7px;
+  }
+  .draft-row + .draft-row{ border-top:1px solid var(--border); }
+  .draft-row:hover{ background:var(--surface-2); }
+  .day{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.72rem;
+    color:var(--text-muted);
+    line-height:1.3;
+  }
+  .day b{ display:block; color:var(--text); font-size:0.86rem; }
+  .draft-txt p{ margin:0; font-size:0.9rem; }
+  .draft-txt .tag{
+    display:inline-block;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.66rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--teal);
+    margin-bottom:4px;
+  }
+  .row-actions{ display:flex; gap:6px; }
+  .chip{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.68rem;
+    padding:5px 9px;
+    border-radius:5px;
+    border:1px solid var(--border);
+    color:var(--text-muted);
+    background:transparent;
+  }
+  .chip.approve{ border-color:var(--teal); color:var(--teal); }
+  .console-foot{
+    border-top:1px solid var(--border);
+    padding:10px 16px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.72rem;
+    color:var(--text-muted);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+
+  /* ============ SECTION SCAFFOLD ============ */
+  section{ padding:64px 0; border-top:1px solid var(--border); }
+  .sec-head{
+    display:grid;
+    grid-template-columns: 220px 1fr;
+    gap:32px;
+    margin-bottom:40px;
+  }
+  @media (max-width: 760px){ .sec-head{ grid-template-columns:1fr; gap:10px; } }
+  .sec-head h2{
+    font-size:clamp(1.7rem, 3.4vw, 2.5rem);
+    line-height:1;
+    margin:8px 0 0;
+  }
+  .sec-head p{
+    color:var(--text-muted);
+    max-width:56ch;
+    margin:8px 0 0;
+    align-self:start;
+  }
+
+  /* ---- how it works ---- */
+  .steps{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+  }
+  @media (max-width: 980px){ .steps{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width: 620px){ .steps{ grid-template-columns:1fr; } }
+  .step{ display:flex; flex-direction:column; gap:12px; }
+  .step-num{
+    font-family:"Big Shoulders Display", sans-serif;
+    font-weight:900;
+    font-size:2.2rem;
+    color:var(--border);
+    line-height:1;
+  }
+  .step h3{ margin:0; font-size:1.02rem; font-weight:700; }
+  .step p{ margin:0; font-size:0.88rem; color:var(--text-muted); }
+  .mini{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:12px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.72rem;
+  }
+  .mini .k{ color:var(--text-muted); }
+  .mini .v{ color:var(--text); font-weight:600; }
+  .mini .pos{ color:var(--teal); }
+  .bars{ display:flex; align-items:flex-end; gap:3px; height:34px; margin:8px 0; }
+  .bars i{ flex:1; background:var(--teal); opacity:0.35; border-radius:2px 2px 0 0; }
+  .bars i.hi{ opacity:1; }
+
+  /* ---- outcomes ---- */
+  .outcomes{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:1px;
+    background:var(--border);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  @media (max-width: 900px){ .outcomes{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width: 600px){ .outcomes{ grid-template-columns:1fr; } }
+  .outcome{
+    background:var(--surface);
+    padding:26px 22px;
+    display:flex; flex-direction:column; gap:12px;
+  }
+  .outcome h3{
+    font-family:"Big Shoulders Display", sans-serif;
+    font-weight:800;
+    text-transform:none;
+    font-size:1.28rem;
+    line-height:1.08;
+    margin:0;
+  }
+  .outcome p{ margin:0; color:var(--text-muted); font-size:0.88rem; }
+  .outcome .feat{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.72rem;
+    color:var(--text-muted);
+    border-top:1px solid var(--border);
+    padding-top:10px;
+    margin-top:auto;
+  }
+  .outcome .feat b{ color:var(--teal); font-weight:600; }
+
+  /* ---- platforms strip ---- */
+  .platforms{
+    display:flex; flex-wrap:wrap; gap:8px;
+    margin-top:18px;
+  }
+  .platform-chip{
+    display:flex; align-items:center; gap:7px;
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:6px 12px 6px 8px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.72rem;
+    color:var(--text-muted);
+  }
+  .platform-chip i{ width:7px; height:7px; border-radius:50%; background:var(--teal); display:block; }
+
+  /* ---- differentiation ---- */
+  .diff-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:32px;
+  }
+  @media (max-width: 900px){ .diff-grid{ grid-template-columns:1fr; gap:28px; } }
+  .diff-item .idx{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.72rem;
+    color:var(--amber);
+    letter-spacing:0.06em;
+  }
+  .diff-item h3{
+    font-family:"Big Shoulders Display", sans-serif;
+    text-transform:none;
+    font-weight:800;
+    font-size:1.4rem;
+    margin:8px 0 10px;
+    line-height:1.1;
+  }
+  .diff-item p{ color:var(--text-muted); margin:0; font-size:0.92rem; }
+
+  /* ---- pricing ---- */
+  .price-head{
+    display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:16px;
+    margin-bottom:26px;
+  }
+  .curr-toggle{ display:flex; gap:2px; background:var(--surface-2); border:1px solid var(--border); border-radius:7px; padding:3px; }
+  .curr-toggle button{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.74rem;
+    padding:6px 11px;
+    border-radius:5px;
+    border:none;
+    background:transparent;
+    color:var(--text-muted);
+    cursor:pointer;
+  }
+  .curr-toggle button.on{ background:var(--surface); color:var(--text); box-shadow:0 1px 2px rgba(0,0,0,0.08); }
+  .price-note{ font-size:0.8rem; color:var(--text-muted); font-family:"IBM Plex Mono", monospace; }
+
+  .plans{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+  }
+  @media (max-width: 980px){ .plans{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width: 560px){ .plans{ grid-template-columns:1fr; } }
+  .plan{
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:22px 20px;
+    background:var(--surface);
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .plan.feat{ border-color:var(--amber); }
+  .plan-name{ font-family:"IBM Plex Mono", monospace; font-size:0.78rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-muted); }
+  .plan-price{ font-family:"Big Shoulders Display", sans-serif; font-weight:800; font-size:2.1rem; line-height:1; }
+  .plan-price span{ font-family:"IBM Plex Mono", monospace; font-size:0.8rem; font-weight:400; color:var(--text-muted); text-transform:none; }
+  .plan ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; }
+  .plan li{ font-size:0.85rem; color:var(--text-muted); padding-left:16px; position:relative; }
+  .plan li::before{ content:"·"; position:absolute; left:2px; color:var(--teal); font-weight:700; }
+  .plan .btn{ margin-top:auto; }
+
+  /* ---- final cta ---- */
+  .final{
+    text-align:left;
+    background:var(--header-bar);
+    color:var(--header-bar-text);
+    border-radius:14px;
+    padding:52px 44px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:1.2fr auto;
+    gap:32px;
+    align-items:center;
+  }
+  @media (max-width: 760px){ .final{ grid-template-columns:1fr; padding:36px 26px; } }
+  .final .eyebrow{ color:#B7ADA0; }
+  .final h2{
+    font-size:clamp(1.8rem, 4vw, 2.6rem);
+    line-height:1.02;
+    margin:10px 0 14px;
+  }
+  .final p{ color:#C9C2B6; max-width:50ch; margin:0; font-size:0.98rem; }
+  .final .side{ display:flex; flex-direction:column; gap:10px; align-items:flex-start; }
+  .final .btn-primary{ font-size:1rem; padding:14px 26px; }
+  .final .cta-note{ color:#8F8779; }
+
+  /* ---- footer ---- */
+  footer{
+    border-top:1px solid var(--border);
+    padding:48px 0 34px;
+  }
+  .foot-grid{
+    display:grid;
+    grid-template-columns: 1.4fr repeat(3, 1fr);
+    gap:28px;
+    margin-bottom:34px;
+  }
+  @media (max-width: 760px){ .foot-grid{ grid-template-columns:repeat(2,1fr); } }
+  .foot-grid h4{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--text-muted);
+    margin:0 0 12px;
+  }
+  .foot-grid ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px; }
+  .foot-grid a{ text-decoration:none; font-size:0.88rem; color:var(--text); }
+  .foot-grid a:hover{ color:var(--amber); }
+  .foot-bottom{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+    border-top:1px solid var(--border);
+    padding-top:20px;
+    font-size:0.78rem;
+    color:var(--text-muted);
+  }
+
+  .reveal{ opacity:0; transform:translateY(14px); transition:opacity 0.5s ease, transform 0.5s ease; }
+  .reveal.show{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+  }
+</style>
+
+<header class="site">
+  <div class="wrap navrow">
+    <a class="wordmark" href="#top">Agent<span class="dot">•</span>Post</a>
+    <nav class="primary">
+      <div class="navlinks">
+        <a href="#how">How it works</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#academy">Academy</a>
+      </div>
+      <span class="lang"><b>EN</b> · ES · PT · FR</span>
+      <a class="btn btn-ghost btn-sm" href="#login">Log in</a>
+      <a class="btn btn-primary btn-sm" href="#signup">Start free</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- ============ HERO ============ -->
+  <section class="hero wrap" style="border-top:none; padding-top:76px;">
+    <div>
+      <span class="eyebrow">Social scheduling · ads · analytics · inbox — one Brand</span>
+      <h1 class="display">Your week of posts,<br>drafted before Monday,<br><em>waiting for a yes.</em></h1>
+      <p class="sub">AgentPost is for freelancers, small business owners, and agency teams who run a brand's social accounts by hand today. Connect your platforms, and the agent studies what worked over your last 30 days and drafts what should run next — you approve, edit, or skip each one.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#signup">Start free — no card needed</a>
+        <a class="btn btn-ghost" href="#how">See a week it drafted</a>
+      </div>
+      <div class="cta-note">Setup takes about 3 minutes. Cancel anytime — there's nothing to cancel on Free.</div>
+
+      <div class="proof-strip">
+        <div class="proof-item"><b class="mono">14</b><span>platforms behind one calendar</span></div>
+        <div class="proof-item"><b class="mono">1</b><span>inbox for every reply, every network</span></div>
+        <div class="proof-item"><b class="mono">1</b><span>report your client won't have to ask for</span></div>
+      </div>
+    </div>
+
+    <div class="console reveal">
+      <div class="console-bar">
+        <div class="console-dots"><i></i><i></i><i></i></div>
+        <div class="console-title">agent — this week's drafts · Riverside Coffee Co.</div>
+      </div>
+      <div class="console-body">
+        <div class="draft-row">
+          <div class="day mono">MON<b>Feb 9</b></div>
+          <div class="draft-txt"><span class="tag">Instagram · Reel</span><p>"The oat milk debate is over. We tried 6, ranked them, no notes."</p></div>
+          <div class="row-actions"><span class="chip approve">Approve</span><span class="chip">Edit</span></div>
+        </div>
+        <div class="draft-row">
+          <div class="day mono">WED<b>Feb 11</b></div>
+          <div class="draft-txt"><span class="tag">Facebook · Photo</span><p>Restock post for the new bag — same one that did 3× your average last month.</p></div>
+          <div class="row-actions"><span class="chip approve">Approve</span><span class="chip">Edit</span></div>
+        </div>
+        <div class="draft-row">
+          <div class="day mono">FRI<b>Feb 13</b></div>
+          <div class="draft-txt"><span class="tag">TikTok · Video</span><p>Behind-the-counter clip during Friday rush — your best-performing format twice running.</p></div>
+          <div class="row-actions"><span class="chip approve">Approve</span><span class="chip">Edit</span></div>
+        </div>
+      </div>
+      <div class="console-foot">
+        <span>Drafted Sun, Feb 8 · 9:14 PM — based on your last 30 days</span>
+        <span>2 more drafts below ↓</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section id="how" class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">How it works</span>
+      <h2 class="display">Four steps, in order.</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num mono">01</div>
+        <h3>Connect your platforms</h3>
+        <div class="mini">
+          <div><span class="k">Instagram Business</span></div>
+          <div><span class="k">Requesting:</span> <span class="v">publish, read comments</span></div>
+          <div style="margin-top:8px"><span class="chip approve">Connect</span></div>
+        </div>
+        <p>A wizard for each platform explains exactly which permission it's asking for and why — never a vague "allow everything" screen.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num mono">02</div>
+        <h3>The agent studies your last 30 days</h3>
+        <div class="mini">
+          <div class="bars"><i style="height:30%"></i><i style="height:55%"></i><i class="hi" style="height:90%"></i><i style="height:40%"></i><i style="height:60%"></i><i style="height:35%"></i></div>
+          <div><span class="k">Best time to post:</span> <span class="v pos">Tue 7:40 PM</span></div>
+        </div>
+        <p>It looks at what you posted, what got saved and shared, and when your audience is actually online — then builds a week around what already works for this Brand.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num mono">03</div>
+        <h3>You approve, edit, or skip</h3>
+        <div class="mini">
+          <div class="draft-row" style="grid-template-columns:1fr auto; padding:6px 0;">
+            <span class="k">Fri · TikTok video</span>
+            <span class="row-actions"><span class="chip approve">✓</span><span class="chip">✎</span><span class="chip">✕</span></span>
+          </div>
+        </div>
+        <p>One at a time, or all at once. Nothing publishes without a yes from you — or from a teammate, if you've turned on approvals.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num mono">04</div>
+        <h3>It posts, then tells you what happened</h3>
+        <div class="mini">
+          <div><span class="k">Note:</span></div>
+          <div style="margin-top:4px; color:var(--text)">"Reels outperformed static posts 3:1 this month. Try two more next week."</div>
+        </div>
+        <p>Approved posts publish on schedule. A week later, the agent explains what worked in a sentence — not just a chart you have to interpret.</p>
+      </div>
+    </div>
+
+    <div class="platforms">
+      <span class="platform-chip"><i></i>Facebook</span>
+      <span class="platform-chip"><i></i>Instagram</span>
+      <span class="platform-chip"><i></i>TikTok</span>
+      <span class="platform-chip"><i></i>LinkedIn</span>
+      <span class="platform-chip"><i></i>X</span>
+      <span class="platform-chip"><i></i>Pinterest</span>
+      <span class="platform-chip"><i></i>YouTube</span>
+      <span class="platform-chip"><i></i>Twitch</span>
+      <span class="platform-chip"><i></i>Google Business</span>
+      <span class="platform-chip"><i></i>Threads</span>
+      <span class="platform-chip"><i></i>Bluesky</span>
+      <span class="platform-chip"><i></i>WhatsApp Business</span>
+      <span class="platform-chip"><i></i>Telegram</span>
+      <span class="platform-chip"><i></i>Discord</span>
+    </div>
+  </section>
+
+  <!-- ============ FEATURES BY OUTCOME ============ -->
+  <section id="features" class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">What you actually get done</span>
+      <h2 class="display">Five jobs, one Brand.</h2>
+      <p>Every feature below lives inside the same Brand you set up once — not five products stitched together with different logins.</p>
+    </div>
+    <div class="outcomes">
+      <div class="outcome reveal">
+        <h3>Plan a month in twenty minutes</h3>
+        <p>Drag-and-drop calendar across every connected platform, with an exact preview of how each post will actually render.</p>
+        <div class="feat"><b>Planner —</b> bulk/CSV scheduling, evergreen recycling, drafts &amp; notes, best-time-to-post per Brand.</div>
+      </div>
+      <div class="outcome reveal">
+        <h3>See what's actually working</h3>
+        <p>Engagement, reach, and growth per platform, plus website analytics explained next to Google Analytics — not as a mystery number.</p>
+        <div class="feat"><b>Analytics —</b> competitor &amp; hashtag tracking, AI-visibility score for ChatGPT, Gemini &amp; AI Overviews.</div>
+      </div>
+      <div class="outcome reveal">
+        <h3>Never miss a message</h3>
+        <p>Instagram, Facebook, Google Business, WhatsApp, Telegram, and Discord read as one list, not six inboxes.</p>
+        <div class="feat"><b>Inbox —</b> assign to a teammate, filter by Brand, mark read / unread / resolved.</div>
+      </div>
+      <div class="outcome reveal">
+        <h3>Run ads next to what inspired them</h3>
+        <p>Meta, Google, and TikTok campaigns in one dashboard — organic and paid side by side, not two separate tools.</p>
+        <div class="feat"><b>Ads —</b> budgets, objectives, and results in one place; boost a working post in one click.</div>
+      </div>
+      <div class="outcome reveal">
+        <h3>Hand over a report, not a login</h3>
+        <p>A branded PDF or a shareable link — the client reads it without an account, and understands it without a call.</p>
+        <div class="feat"><b>Reports —</b> Campaign Dashboards, plain-language "what changed and why," white-label on the Agency plan.</div>
+      </div>
+      <div class="outcome reveal">
+        <h3>Turn a bio link into a storefront</h3>
+        <p>A link-in-bio page with real click analytics, plus TikTok Shop and Instagram/Facebook catalog sync for the products behind it.</p>
+        <div class="feat"><b>SmartLinks &amp; Commerce —</b> themeable page builder, shoppable posts, UGC pipeline.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DIFFERENTIATION ============ -->
+  <section class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Why this and not another calendar</span>
+      <h2 class="display">Three things we built differently.</h2>
+    </div>
+    <div class="diff-grid">
+      <div class="diff-item reveal">
+        <div class="idx mono">— agent, not chat</div>
+        <h3>It drafts. It doesn't just suggest.</h3>
+        <p>Most tools bolt a chat window onto a calendar and call it AI. AgentPost's agent has permission to build the actual draft from your Brand's own posting history — you're reviewing finished work, not starting from a blank prompt.</p>
+      </div>
+      <div class="diff-item reveal">
+        <div class="idx mono">— pricing</div>
+        <h3>Priced like the rest of the world matters.</h3>
+        <p>Pricing adjusts to where you actually are, not a flat US-dollar number with a currency symbol swapped in. Pix and Mercado Pago work at checkout in Latin America — no PayPal detour required.</p>
+      </div>
+      <div class="diff-item reveal">
+        <div class="idx mono">— structure</div>
+        <h3>One Brand, five jobs.</h3>
+        <p>Scheduling, ads, analytics, inbox, and your link-in-bio page all live under the same Brand you set up once. Switch Brands, not apps, when you manage more than one.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRICING ============ -->
+  <section id="pricing" class="wrap">
+    <div class="price-head">
+      <div>
+        <span class="eyebrow">Pricing</span>
+        <h2 class="display" style="margin:8px 0 0;">Free is a real plan here.</h2>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
+        <div class="curr-toggle" id="currToggle" role="group" aria-label="Display currency">
+          <button class="on" data-c="USD">USD</button>
+          <button data-c="EUR">EUR</button>
+          <button data-c="BRL">BRL</button>
+          <button data-c="INR">INR</button>
+          <button data-c="MXN">MXN</button>
+        </div>
+        <span class="price-note">Adjusted for local purchasing power — not a flat conversion.</span>
+      </div>
+    </div>
+
+    <div class="plans">
+      <div class="plan">
+        <span class="plan-name">Free</span>
+        <div class="plan-price mono" data-plan="free">$0<span>/mo</span></div>
+        <ul>
+          <li>1 Brand</li>
+          <li>Core platform connections</li>
+          <li>Planner + basic analytics</li>
+          <li>3 agent drafts a week</li>
+          <li>No credit card, ever</li>
+        </ul>
+        <a class="btn btn-ghost" href="#signup">Start free</a>
+      </div>
+      <div class="plan feat">
+        <span class="plan-name" style="color:var(--amber)">Starter</span>
+        <div class="plan-price mono" data-plan="starter">$15<span>/mo per Brand</span></div>
+        <ul>
+          <li>Everything in Free</li>
+          <li>Unlimited agent drafts</li>
+          <li>Best-time-to-post, evergreen recycling</li>
+          <li>Ads management (Meta, Google, TikTok)</li>
+        </ul>
+        <a class="btn btn-primary" href="#signup">Start free trial</a>
+      </div>
+      <div class="plan">
+        <span class="plan-name">Advanced</span>
+        <div class="plan-price mono" data-plan="advanced">$39<span>/mo per Brand</span></div>
+        <ul>
+          <li>Everything in Starter</li>
+          <li>Social listening &amp; sentiment</li>
+          <li>Competitor tracking, Campaign Dashboards</li>
+          <li>3 team seats + approvals</li>
+        </ul>
+        <a class="btn btn-ghost" href="#signup">Start free trial</a>
+      </div>
+      <div class="plan">
+        <span class="plan-name">Agency</span>
+        <div class="plan-price mono">Custom</div>
+        <ul>
+          <li>Unlimited Brands</li>
+          <li>White-label domain &amp; branding</li>
+          <li>API access</li>
+          <li>Referral revenue share</li>
+        </ul>
+        <a class="btn btn-ghost" href="#contact">Talk to us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ACADEMY MENTION ============ -->
+  <section id="academy" class="wrap" style="padding-bottom:40px;">
+    <div class="sec-head" style="margin-bottom:0;">
+      <span class="eyebrow">AgentPost Academy</span>
+      <h2 class="display" style="font-size:clamp(1.5rem,3vw,2rem)">A free certification, taught straight — not gated behind a trial.</h2>
+    </div>
+  </section>
+
+  <!-- ============ FINAL CTA ============ -->
+  <section class="wrap" style="border-top:none; padding-top:0;">
+    <div class="final reveal">
+      <div>
+        <span class="eyebrow">Before you go</span>
+        <h2 class="display">You already know what you'd post this week.</h2>
+        <p>Connect one platform and the agent will have five drafts ready by tonight. Keep the ones that sound like you, edit the rest, delete what's wrong. No card, no call, no seven-day countdown.</p>
+      </div>
+      <div class="side">
+        <a class="btn btn-primary" href="#signup">Start free — no card needed</a>
+        <span class="cta-note mono">Setup: about 3 minutes</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="foot-grid">
+    <div>
+      <a class="wordmark" href="#top">Agent<span class="dot">•</span>Post</a>
+      <p style="color:var(--text-muted); font-size:0.85rem; max-width:32ch; margin-top:10px;">The command center for running a brand's presence online — one Brand, every platform.</p>
+    </div>
+    <div>
+      <h4>Product</h4>
+      <ul>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#academy">Academy</a></li>
+        <li><a href="#integrations">Integrations</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Compare</h4>
+      <ul>
+        <li><a href="#vs-hootsuite">AgentPost vs. Hootsuite</a></li>
+        <li><a href="#vs-buffer">AgentPost vs. Buffer</a></li>
+        <li><a href="#vs-metricool">AgentPost vs. Metricool</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#security">Security &amp; Privacy</a></li>
+        <li><a href="#blog">Blog</a></li>
+        <li><a href="#login">Log in</a></li>
+        <li><a href="#signup">Sign up</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 AgentPost. GDPR-aware by default — see the Security &amp; Privacy page for how data is handled.</span>
+    <span class="lang">EN · ES · PT · FR</span>
+  </div>
+</footer>
+
+<script>
+  // scroll reveal
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var els = document.querySelectorAll('.reveal');
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) { e.target.classList.add('show'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.15 });
+    els.forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('show'); });
+  }
+
+  // currency toggle — PPP-adjusted illustrative pricing, not flat conversion
+  var prices = {
+    USD: { free:'$0', starter:'$15', advanced:'$39' },
+    EUR: { free:'€0', starter:'€14', advanced:'€36' },
+    BRL: { free:'R$0', starter:'R$49', advanced:'R$129' },
+    INR: { free:'₹0', starter:'₹699', advanced:'₹1,799' },
+    MXN: { free:'$0', starter:'$199', advanced:'$499' }
+  };
+  var suffix = { free:'/mo', starter:'/mo per Brand', advanced:'/mo per Brand' };
+  var toggle = document.getElementById('currToggle');
+  if (toggle) {
+    toggle.addEventListener('click', function(ev){
+      var btn = ev.target.closest('button');
+      if (!btn) return;
+      toggle.querySelectorAll('button').forEach(function(b){ b.classList.remove('on'); });
+      btn.classList.add('on');
+      var c = btn.getAttribute('data-c');
+      document.querySelectorAll('[data-plan]').forEach(function(el){
+        var plan = el.getAttribute('data-plan');
+        el.innerHTML = prices[c][plan] + '<span>' + suffix[plan] + '</span>';
+      });
+    });
+  }
+</script>
